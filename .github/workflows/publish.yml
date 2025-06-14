@@ -25,10 +25,10 @@ jobs:
       - name: Grant Permission to Execute Gradle
         run: chmod +x gradlew
 
-#      - name: Build with Gradle
-#        uses: gradle/gradle-build-action@v2
-#        with:
-#          arguments: build
+      #      - name: Build with Gradle
+      #        uses: gradle/gradle-build-action@v2
+      #        with:
+      #          arguments: build
 
       - name: Publish Library
         run: |
@@ -36,7 +36,7 @@ jobs:
           ./gradlew publishToMavenCentral --no-configuration-cache
           echo "Published and Released ✅"
         env:
-          VERSION_NAME: ${{ github.event.inputs.versionName }}
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ github.event.inputs.versionName }}
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGINMEMORYKEYPASSWORD }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_MAVENCENTRALUSERNAME }}
@@ -52,13 +52,11 @@ jobs:
         env:
           TAG: ${{ github.event.inputs.versionName }}
 
-      - name: Create Release on GitHub
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.event.inputs.versionName }}
-          release_name: ${{ github.event.inputs.versionName }}
-          draft: true
-          prerelease: false
+        run: |
+          gh release create "${{ github.event.inputs.versionName }}" \
+              --title "${{ github.event.inputs.versionName }}" \
+              --verify-tag
+          shell: bash
