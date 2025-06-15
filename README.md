@@ -6,6 +6,7 @@ Add beautiful animated snow effects to your UI effortlessly.
 
 <img src="assets/example.gif" alt="Demo" width="800" />
 
+[![](https://img.shields.io/maven-central/v/me.anasmusa/snowflake.svg?label=version)](https://search.maven.org/artifact/me.anasmusa/snowflake)
 ---
 
 ## ✨ Features
@@ -25,7 +26,7 @@ Add this module as a dependency in your Compose Multiplatform project.
 **Gradle (Kotlin DSL):**
 ```kotlin
 dependencies {
-    implementation("com.anasmusa:snowflake:1.0.0")
+    implementation("com.anasmusa:snowflake:$latest_version")
 }
 ```
 ---
