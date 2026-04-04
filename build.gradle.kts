@@ -7,3 +7,19 @@ plugins {
     alias(libs.plugins.composeCompiler) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
 }
+
+val installGitHook = tasks.register("installGitHook", Copy::class) {
+    from("$rootDir/pre-commit")
+    into("$rootDir/.git/hooks")
+    filePermissions {
+        user { read = true; write = true; execute = true }
+        group { read = true; execute = true }
+        other { read = true; execute = true }
+    }
+}
+
+allprojects {
+    afterEvaluate {
+        tasks.findByName("preBuild")?.dependsOn(installGitHook)
+    }
+}
