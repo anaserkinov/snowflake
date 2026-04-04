@@ -20,13 +20,11 @@ import kotlin.math.sin
 import kotlin.random.Random
 import kotlin.time.ExperimentalTime
 
-
 class SnowflakeLayer(
     @IntRange(from = 1L, to = 10L) private val snowDensity: Int,
-    private val color: Color
-){
-
-    class Particle{
+    private val color: Color,
+) {
+    class Particle {
         var x: Float = 0f
         var y: Float = 0f
         var vx: Float = 0f
@@ -41,10 +39,10 @@ class SnowflakeLayer(
         fun draw(
             drawScope: DrawScope,
             particleBitmap: ImageBitmap,
-            particleColor: Color
-        ){
+            particleColor: Color,
+        ) {
             with(drawScope) {
-                if (type == 0){
+                if (type == 0) {
                     drawPoints(
                         points = listOf(Offset(x, y)),
                         pointMode = PointMode.Points,
@@ -53,7 +51,7 @@ class SnowflakeLayer(
                         StrokeCap.Round,
                         null,
                         alpha,
-                        null
+                        null,
                     )
                 } else {
                     scale(
@@ -63,9 +61,9 @@ class SnowflakeLayer(
                             drawImage(
                                 image = particleBitmap,
                                 topLeft = Offset(x, y),
-                                alpha = alpha
+                                alpha = alpha,
                             )
-                        }
+                        },
                     )
                 }
             }
@@ -75,27 +73,30 @@ class SnowflakeLayer(
     private var particleBitmap: ImageBitmap? = null
 
     private var lastAnimationTime: Long = 0
-    private val createPerFrame = when{
-        snowDensity == 1 -> 1
-        snowDensity <= 3 -> 10
-        snowDensity <= 5 -> 20
-        snowDensity <= 8 -> 30
-        else -> 50
-    }
-    private val minLifetime = when {
-        snowDensity == 1 -> 2000f
-        snowDensity <= 3 -> 3000f
-        snowDensity <= 5 -> 3200f
-        snowDensity <= 8 -> 3500f
-        else -> 4000f
-    }
-    private val lifetimeSpan = when {
-        snowDensity == 1 -> 100
-        snowDensity <= 3 -> 2000
-        snowDensity <= 5 -> 2200
-        snowDensity <= 8 -> 2500
-        else -> 3000
-    }
+    private val createPerFrame =
+        when {
+            snowDensity == 1 -> 1
+            snowDensity <= 3 -> 10
+            snowDensity <= 5 -> 20
+            snowDensity <= 8 -> 30
+            else -> 50
+        }
+    private val minLifetime =
+        when {
+            snowDensity == 1 -> 2000f
+            snowDensity <= 3 -> 3000f
+            snowDensity <= 5 -> 3200f
+            snowDensity <= 8 -> 3500f
+            else -> 4000f
+        }
+    private val lifetimeSpan =
+        when {
+            snowDensity == 1 -> 100
+            snowDensity <= 3 -> 2000
+            snowDensity <= 5 -> 2200
+            snowDensity <= 8 -> 2500
+            else -> 3000
+        }
 
     private val particles = arrayListOf<Particle>()
     private val freeParticles = arrayListOf<Particle>()
@@ -141,16 +142,16 @@ class SnowflakeLayer(
         }
     }
 
-    fun update(newTime: Long){
+    fun update(newTime: Long) {
         val dt: Long = min(17, newTime - lastAnimationTime)
         updateParticles(dt)
         lastAnimationTime = newTime
     }
 
     @OptIn(ExperimentalTime::class)
-    fun draw(scope: DrawScope){
-        with(scope){
-            if (particleBitmap == null){
+    fun draw(scope: DrawScope) {
+        with(scope) {
+            if (particleBitmap == null) {
                 val particleThinPaint = Paint()
                 particleThinPaint.isAntiAlias = true
                 particleThinPaint.color = color
@@ -159,17 +160,18 @@ class SnowflakeLayer(
                 particleThinPaint.style = PaintingStyle.Stroke
 
                 val angleDiff = (PI / 180 * 60).toFloat()
-                particleBitmap = ImageBitmap(
-                    16.dp.toPx().toInt(),
-                    16.dp.toPx().toInt(),
-                    ImageBitmapConfig.Argb8888
-                )
+                particleBitmap =
+                    ImageBitmap(
+                        16.dp.toPx().toInt(),
+                        16.dp.toPx().toInt(),
+                        ImageBitmapConfig.Argb8888,
+                    )
                 val bitmapCanvas = Canvas(particleBitmap!!)
                 var angle = -PI / 2
                 val px = 2.0f.dp.toPx() * 2
                 val px1 = -0.57f.dp.toPx() * 2
                 val py1: Float = 1.55f.dp.toPx() * 2
-                repeat(6){
+                repeat(6) {
                     val x = 8.dp.toPx()
                     val y = 8.dp.toPx()
                     var x1 = cos(angle.toDouble()).toFloat() * px
@@ -179,7 +181,7 @@ class SnowflakeLayer(
                     bitmapCanvas.drawLine(
                         Offset(x, y),
                         Offset(x + x1, y + y1),
-                        particleThinPaint
+                        particleThinPaint,
                     )
 
                     val angle2 = angle - PI / 2
@@ -188,7 +190,7 @@ class SnowflakeLayer(
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
-                        particleThinPaint
+                        particleThinPaint,
                     )
 
                     x1 = (-cos(angle2.toDouble()) * px1 - sin(angle2.toDouble()) * py1).toFloat()
@@ -196,7 +198,7 @@ class SnowflakeLayer(
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
-                        particleThinPaint
+                        particleThinPaint,
                     )
 
                     angle += angleDiff
@@ -209,7 +211,7 @@ class SnowflakeLayer(
                 particle.draw(
                     scope,
                     particleBitmap!!,
-                    color
+                    color,
                 )
             }
 
@@ -252,5 +254,4 @@ class SnowflakeLayer(
             }
         }
     }
-
 }

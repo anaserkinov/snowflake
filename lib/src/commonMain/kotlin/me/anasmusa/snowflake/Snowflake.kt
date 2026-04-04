@@ -17,14 +17,14 @@ fun Snowflake(
     modifier: Modifier = Modifier,
     @IntRange(from = 1L, to = 10L) density: Int,
     color: Color,
-    contentDescription: String? = null
+    contentDescription: String? = null,
 ) {
     val layer = remember(density, color) { SnowflakeLayer(density, color) }
 
     val redrawTrigger = remember { mutableStateOf(0L) }
 
     LaunchedEffect(layer) {
-        while (true){
+        while (true) {
             withFrameMillis {
                 layer.update(it)
                 redrawTrigger.value++
@@ -33,13 +33,15 @@ fun Snowflake(
     }
 
     Canvas(
-        modifier = modifier.let {
-            if (contentDescription == null)
-                it
-            else
-                it.semantics { this.contentDescription = contentDescription }
-        }
-    ){
+        modifier =
+            modifier.let {
+                if (contentDescription == null) {
+                    it
+                } else {
+                    it.semantics { this.contentDescription = contentDescription }
+                }
+            },
+    ) {
         val value = redrawTrigger.value
         layer.draw(this)
     }

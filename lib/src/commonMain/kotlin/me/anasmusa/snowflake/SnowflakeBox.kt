@@ -20,14 +20,14 @@ fun SnowflakeBox(
     color: Color,
     contentAlignment: Alignment = Alignment.TopStart,
     propagateMinConstraints: Boolean = false,
-    content: @Composable BoxScope.() -> Unit
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val layer = remember(density, color) { SnowflakeLayer(density, color) }
 
     val redrawTrigger = remember { mutableStateOf(0L) }
 
     LaunchedEffect(layer) {
-        while (true){
+        while (true) {
             withFrameMillis {
                 layer.update(it)
                 redrawTrigger.value++
@@ -36,12 +36,13 @@ fun SnowflakeBox(
     }
 
     Box(
-        modifier = modifier.drawBehind {
-            val value = redrawTrigger.value
-            layer.draw(this)
-        },
+        modifier =
+            modifier.drawBehind {
+                val value = redrawTrigger.value
+                layer.draw(this)
+            },
         contentAlignment = contentAlignment,
         propagateMinConstraints = propagateMinConstraints,
-        content = content
+        content = content,
     )
 }
