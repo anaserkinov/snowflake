@@ -48,16 +48,18 @@ jobs:
           git config --global user.email "anaserkinjonov@gmail.com"
           git config --global user.name "$GITHUB_ACTOR"
 
-          git tag -a $TAG -m "Release v$TAG"
+          TAG="v${{ github.event.inputs.versionName }}"
+
+          git tag -a $TAG -m "Release $TAG"
           git push origin $TAG
-        env:
-          TAG: ${{ github.event.inputs.versionName }}
 
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${{ github.event.inputs.versionName }}" \
-              --title "${{ github.event.inputs.versionName }}" \
+          TAG="v${{ github.event.inputs.versionName }}"
+
+          gh release create "$TAG" \
+              --title "$TAG" \
               --verify-tag
-          shell: bash
+        shell: bash
