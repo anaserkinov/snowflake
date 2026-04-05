@@ -174,8 +174,8 @@ class SnowflakeLayer(
                 repeat(6) {
                     val x = 8.dp.toPx()
                     val y = 8.dp.toPx()
-                    var x1 = cos(angle.toDouble()).toFloat() * px
-                    var y1 = sin(angle.toDouble()).toFloat() * px
+                    var x1 = cos(angle).toFloat() * px
+                    var y1 = sin(angle).toFloat() * px
                     val cx = x1 * 0.66f
                     val cy = y1 * 0.66f
                     bitmapCanvas.drawLine(
@@ -185,16 +185,16 @@ class SnowflakeLayer(
                     )
 
                     val angle2 = angle - PI / 2
-                    x1 = (cos(angle2.toDouble()) * px1 - sin(angle2.toDouble()) * py1).toFloat()
-                    y1 = (sin(angle2.toDouble()) * px1 + cos(angle2.toDouble()) * py1).toFloat()
+                    x1 = (cos(angle2) * px1 - sin(angle2) * py1).toFloat()
+                    y1 = (sin(angle2) * px1 + cos(angle2) * py1).toFloat()
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
                         particleThinPaint,
                     )
 
-                    x1 = (-cos(angle2.toDouble()) * px1 - sin(angle2.toDouble()) * py1).toFloat()
-                    y1 = (-sin(angle2.toDouble()) * px1 + cos(angle2.toDouble()) * py1).toFloat()
+                    x1 = (-cos(angle2) * px1 - sin(angle2) * py1).toFloat()
+                    y1 = (-sin(angle2) * px1 + cos(angle2) * py1).toFloat()
                     bitmapCanvas.drawLine(
                         Offset(x + cx, y + cy),
                         Offset(x + x1, y + y1),
@@ -217,7 +217,7 @@ class SnowflakeLayer(
 
             val maxCount = snowDensity * 100
             if (particles.size < maxCount) {
-                (0..<createPerFrame).forEach { i ->
+                (0..<createPerFrame).forEach { _ ->
                     if (particles.size < maxCount && Random.nextFloat() > 0.7f) {
                         val cx: Float = Random.nextFloat() * size.width
                         val cy: Float = Random.nextFloat() * (size.height - 20.dp.toPx())
