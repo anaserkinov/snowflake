@@ -11,8 +11,6 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
-val versionName = (project.findProperty("VERSION_NAME") as String?) ?: "1.0.0-SNAPSHOT"
-
 kotlin {
     android {
         namespace = "me.anasmusa.snowflake"
@@ -81,12 +79,17 @@ dependencies {
     androidRuntimeClasspath(compose.uiTooling)
 }
 
+allprojects {
+    group = "me.anasmusa"
+    version = (project.findProperty("VERSION_NAME") as String?) ?: "1.0.0-SNAPSHOT"
+}
+
 mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    publishToMavenCentral()
 
     signAllPublications()
 
-    coordinates("me.anasmusa", "snowflake", versionName)
+    coordinates(artifactId = "snowflake")
 
     pom {
         name = "Snowflake"
